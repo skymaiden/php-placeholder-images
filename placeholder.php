@@ -3,9 +3,8 @@
 // Version: 0.1
 // Author: Hinerangi Courtenay - @sky_maiden
 
-// Usage:
-// 		<img src="placeholder.php?size=400x150&bg=eee&fg=999&text=Generated+image" alt="Placeholder image" />
-// 		(all parameters are optional)
+// Usage (all parameters are optional):
+// <img src="placeholder.php?size=400x150&bg=eee&fg=999&text=Generated+image" alt="Placeholder image" />
 
 // Inspired by http://placehold.it/
 
@@ -37,7 +36,7 @@ $dimensions = explode('x', $getsize);
 $image      = imagecreate($dimensions[0], $dimensions[1]);
 
 // Colours
-$bg         = isset($_GET['bg']) ? $_GET['bg'] : 'cccccc';
+$bg         = isset($_GET['bg']) ? $_GET['bg'] : 'ccc';
 $bg         = hex2rgb($bg);
 $setbg      = imagecolorallocate($image, $bg['r'], $bg['g'], $bg['b']);
 
@@ -50,7 +49,7 @@ $text       = isset($_GET['text']) ? strip_tags($_GET['text']) : $getsize;
 $text       = str_replace('+', ' ', $text);
 
 // Text positioning
-$fontsize   = 5;
+$fontsize   = 4;
 $fontwidth  = imagefontwidth($fontsize);    // width of a character
 $fontheight = imagefontheight($fontsize);   // height of a character
 $length     = strlen($text);                // number of characters
