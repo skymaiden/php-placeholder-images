@@ -10,3 +10,8 @@ See demos: http://skymaiden.github.io/php-placeholder-images/
 
 
 Inspired by http://placehold.it/
+
+
+License
+-------
+MIT: http://skymaiden.mit-license.org
