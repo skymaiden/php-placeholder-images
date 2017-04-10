@@ -1,0 +1,95 @@
+#!/usr/bin/env php
+<?php
+// PHP placeholder images
+// Version: 0.1
+// Author: Sagar Kaurav - @sagarkaurav
+// Inspired by http://placehold.it/
+
+// Convert hex to rgb (modified from csstricks.com)
+function hex2rgb($colour)
+{
+    $colour = preg_replace("/[^abcdef0-9]/i", "", $colour);
+    if (strlen($colour) == 6)
+    {
+        list($r, $g, $b) = str_split($colour, 2);
+        return Array("r" => hexdec($r), "g" => hexdec($g), "b" => hexdec($b));
+    }
+    elseif (strlen($colour) == 3)
+    {
+        list($r, $g, $b) = array($colour[0] . $colour[0], $colour[1] . $colour[1], $colour[2] . $colour[2]);
+        return Array("r" => hexdec($r), "g" => hexdec($g), "b" => hexdec($b));
+    }
+    return false;
+}
+
+$user_data = array();
+for ($i=1; $i < $argc ; $i++)
+{
+  $parameter = explode("=",$argv[$i]);
+  $user_data["$parameter[0]"] = $parameter[1];
+}
+
+foreach ($user_data as $key => $value) {
+  echo $key.'     '.$value."\n";
+}
+//exit;
+
+// Dimensions
+$getsize    = isset($user_data['size'])? $user_data['size'] : '100x100';
+$dimensions = explode('x', $getsize);
+
+// Create image
+$image      = imagecreate($dimensions[0], $dimensions[1]);
+
+// Colours
+$bg         = isset($user_data['bg']) ? $user_data['bg'] : 'ccc';
+$bg         = hex2rgb($bg);
+$setbg      = imagecolorallocate($image, $bg['r'], $bg['g'], $bg['b']);
+
+$fg         = isset($user_data['fg']) ? $user_data['fg'] : '555';
+$fg         = hex2rgb($fg);
+$setfg      = imagecolorallocate($image, $fg['r'], $fg['g'], $fg['b']);
+
+// Text
+$text       = isset($user_data['text']) ? $user_data['text'] : $getsize;
+
+$image_file_name =  isset($user_data['fname'])? $user_data['fname'] : str_replace(' ','_',$text);
+$image_file_name = $image_file_name.'.png';
+
+// Text positioning
+$fontsize   = 20;
+$fontwidth  = imagefontwidth($fontsize);    // width of a character
+$fontheight = imagefontheight($fontsize);   // height of a character
+$length     = strlen($text);                // number of characters
+$textwidth  = $length * $fontwidth;         // text width
+$xpos       = (imagesx($image) - $textwidth) / 2;
+$ypos       = (imagesy($image) - $fontheight) / 2;
+
+// Generate text
+imagettftext($image,$fontsize,0,$xpos,$ypos,$setfg,'./fonts/Concert_One/ConcertOne-Regular.ttf',$text);
+
+  if (!file_exists('images'))
+  {
+    if(!mkdir('images'))
+    {
+      echo "Unable to create images directory. Please create manually.\n";
+      exit;
+    }
+  }
+  if(!file_exists('images/'.$image_file_name))
+  {
+    if(imagepng($image,'images/'.$image_file_name))
+    {
+      echo "Image is created. :)\n";
+    }
+    else
+    {
+      echo "Something went wrong  :(\n";
+    }
+  }
+  else
+  {
+    echo "$image_file_name already exists.\n";
+  }
+
+?>
